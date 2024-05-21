@@ -2,22 +2,23 @@ const { resolve } = require("node:path");
 
 const project = resolve(process.cwd(), "tsconfig.json");
 
-/*
- * This is a custom ESLint configuration for use with
- * internal (bundled by their consumer) libraries
- * that utilize React.
- */
-
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
   extends: ["eslint:recommended", "prettier", "eslint-config-turbo"],
-  plugins: ["only-warn"],
+  plugins: ["only-warn","@typescript-eslint"],
   globals: {
     React: true,
     JSX: true,
+    process: 'readonly',
+  },
+  rules: {
+    // 其他规则
+    //"no-undef": "off", // 关闭 no-undef 规则 
+    "@next/next/no-html-link-for-pages": "off",
+    "@next/next/no-img-element": "off",
   },
   env: {
-    browser: true,
+    node: true,
   },
   settings: {
     "import/resolver": {
@@ -33,7 +34,8 @@ module.exports = {
     "dist/",
   ],
   overrides: [
-    // Force ESLint to detect .tsx files
-    { files: ["*.js?(x)", "*.ts?(x)"] },
+    {
+      files: ["*.js?(x)", "*.ts?(x)"],
+    },
   ],
 };
